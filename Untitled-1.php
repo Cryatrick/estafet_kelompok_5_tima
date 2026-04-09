@@ -1,0 +1,76 @@
+<?php
+$servername = "10.11.12.109";
+$username = "estafet_user";
+$password = "Qwerty123$%";
+$dbname = "estafet_db";
+
+$conn = mysqli_connect($servername, $username, $password, $dbname);
+
+if (!$conn) {
+  die("Connection failed: " . mysqli_connect_error());
+}
+echo "Connected successfully";
+
+session_start();
+include 'db.php';
+
+if (isset($_POST['login'])) {
+    $u = $_POST['username'];
+    $p = md5($_POST['password']);
+    $q = mysqli_query($conn, "SELECT * FROM users WHERE username='$u' AND password='$p'");
+
+    if (mysqli_num_rows($q)) {
+        $_SESSION['username'] = $u;
+        header("Location: dashboard.php");
+        exit();
+    } else {
+        echo "<p style='color:red;'>Login failed</p>";
+    }
+}
+?>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login</title>
+</head>
+<body>
+
+<form method="POST">
+    <h3>Login</h3>
+    <center>
+    <input type="text" name="username" required><br><br>
+    <input type="password" name="password" required><br><br>
+    
+    <button name="login">Login</button>
+</form>
+</center>
+</body>
+
+<img src="http://10.11.12.109/aplikasi_estafet/assets/foto_mahasiswa/2511001_PP.jpg" alt="Mahasiswa 3" width=200x200>
+ipk: <input type="text">
+Nama: <input type="text" name="name" value="<?php echo $nama;?>">
+
+Tempat_lahir: <input type="text" name="tempat_lahir" value="<?php echo $tempat_lahir;?>">
+
+Tanggal_lahir: <input type="text" name="tanggal_lahir" value="<?php echo $tanggal_lahir;?>">
+
+Nama_program_studi: <textarea name="nama_program_studi" rows="5" cols="40"><?php echo $nama_program_studi?></textarea>
+
+Kepala_program_studi : <textarea name="kepala_program_studi" rows="6" cols="40"><?php echo $kepala_program_studi?></textarea>
+
+</html>
+
+Gender:
+<input type="radio" name="gender"
+<?php if (isset($gender) && $gender=="female") echo "checked";?>
+value="female">Female
+<input type="radio" name="gender"
+<?php if (isset($gender) && $gender=="male") echo "checked";?>
+value="male">Male
+<input type="radio" name="gender"
+<?php if (isset($gender) && $gender=="other") echo "checked";?>
+value="other">Other
+
+
+
