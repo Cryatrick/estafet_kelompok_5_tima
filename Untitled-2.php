@@ -10,7 +10,45 @@ if (!$conn) {
   die("Connection failed: " . mysqli_connect_error());
 }
 echo "Connected successfully";
+?>
+<?php
+session_start();
+include 'db.php';
 
+if (isset($_POST['login'])) {
+    $u = $_POST['username'];
+    $p = md5($_POST['password']);
+
+    $q = mysqli_query($conn, "SELECT * FROM users WHERE username='$u' AND password='$p'");
+
+    if (mysqli_num_rows($q)) {
+        $_SESSION['username'] = $u;
+        header("Location: dashboard.php");
+        exit();
+    } else {
+        echo "<p style='color:red;'>Login failed</p>";
+    }
+}
+?>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login</title>
+</head>
+<body>
+
+<form method="POST">
+    <h3>Login</h3>
+    
+    <input type="text" name="username" required><br><br>
+    <input type="password" name="password" required><br><br>
+    
+    <button name="login">Login</button>
+</form>
+
+</body>
+</html>
 <img src="http://10.11.12.109/aplikasi_estafet/assets/foto_mahasiswa/2511001_PP.jpg" alt="Mahasiswa 3">
 ipk: <input type="text">
 Nama: <input type="text" name="name" value="<?php echo $nama;?>">
